@@ -16,7 +16,7 @@ Fixtures.prototype.init = function () {
       , fixtures_path = this._find_fixtures_path();  
   
   if ( !fixtures_path ) throw new Error('fixtures path not found');
-  console.log( fixtures_path );
+  //console.log( fixtures_path );
   var files = fs.readdirSync(fixtures_path); 
 
   files.forEach(function(file){
