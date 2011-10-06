@@ -1,39 +1,93 @@
 
+/**
+ * Module dependencies.
+ */
+
 var fs = require('fs')
   , path = require('path');
 
 
+
+/**
+ * Fixtures constructor.
+ *
+ */
+
 function Fixtures () {
-  this.init();
+  this.fixtures = {};
+  this._init();
 };
 
 
 
-Fixtures.prototype.init = function () {
+/**
+ * Reload all the fixtures
+ *  It is commonly used on setup when the fixtures has been modified.
+ *  
+ * @api public
+ */
+
+Fixtures.prototype.reload = function () {
+
+  var fxs = this._clone(this.fixtures);
+
+  // TODO: check whether i is a function on this (ex: reload )
+  for ( i in fxs ) {
+    if ( fxs.hasOwnProperty(i) ) {
+
+      this[i]= fxs[i];
+      
+    }
+  };
+
+};
+
+Fixtures.prototype._init = function () {
   
-  var fixtures = {}
-      , i
+  var  fixtures_tmp = {}
       , fixtures_path = this._find_fixtures_path();  
   
   if ( !fixtures_path ) throw new Error('fixtures path not found');
-  //console.log( fixtures_path );
+
   var files = fs.readdirSync(fixtures_path); 
 
   files.forEach(function(file){
 
       var file_name = file.replace('.js', '');
-      fixtures[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), encoding='utf8') ); 
+
+      fixtures_tmp[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), encoding='utf8') ); 
 
   });
 
+  this._load(fixtures_tmp);
+};
 
-  for ( i in fixtures ) {
-    if ( fixtures.hasOwnProperty(i) ) {
+Fixtures.prototype._load = function (items) {
 
-      this[i]= fixtures[i];
-      
-    }
-  };
+  this.fixtures = items; 
+
+  this.reload();
+
+};
+
+// only clone the properties of JSON data, nothing about function or date
+Fixtures.prototype._clone = function (param) {
+
+    var result;
+
+    if (typeof param == 'undefined')
+      return undefined;
+    else if (typeof param == 'array')
+      result = [];
+    else if (typeof param == 'object')
+      result = {};
+    else
+      return param;
+
+    for (var i in param)
+      result[i] = this._clone(param[i]);
+
+    return result;
 
 };
 
@@ -61,5 +115,4 @@ Fixtures.prototype._find_fixtures_path = function () {
 };
 
 module.exports = exports = new Fixtures();
-
 

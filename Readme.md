@@ -36,6 +36,15 @@ Access fixtures depending on the name you gave to your fixtures files.
   fx = require('fixtures');
 
   fx.users.my_own_user.name; ("Charles")
+
+```
+
+Reload the fixtures on either setup or teardown when the fixtures were modified on tests
+ 
+```js
+
+  fx.reload();
+
 ```
 
 ## License
