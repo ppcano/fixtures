@@ -30,6 +30,13 @@ module.exports = {
 			should.exist(fx.users.female.type);
 
 			fx.users.female.type.should.not.equal(fx.users.male.type); 
+  },
+
+  clone_works_on_array: function () {
+    
+      should.ok( fx.grandparents.pa1.childs instanceof Array );
+      should.ok( fx.grandparents.pa1.childs[0].grandchilds instanceof Array );
+
   }
 
 

@@ -7,7 +7,6 @@ var fs = require('fs')
   , path = require('path');
 
 
-
 /**
  * Fixtures constructor.
  *
@@ -75,11 +74,11 @@ Fixtures.prototype._clone = function (param) {
 
     var result;
 
-    if (typeof param == 'undefined')
+    if (typeof param === 'undefined')
       return undefined;
-    else if (typeof param == 'array')
+    else if (param instanceof Array)
       result = [];
-    else if (typeof param == 'object')
+    else if (typeof param === 'object')
       result = {};
     else
       return param;
@@ -87,8 +86,8 @@ Fixtures.prototype._clone = function (param) {
     for (var i in param)
       result[i] = this._clone(param[i]);
 
-    return result;
 
+    return result;
 };
 
 Fixtures.prototype._find_fixtures_path = function () {
