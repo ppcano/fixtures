@@ -7,16 +7,37 @@ var fs = require('fs')
   , path = require('path');
 
 
+exports.version = '0.0.2';
+
 /**
  * Fixtures constructor.
  *
  */
 
 function Fixtures () {
-  this.fixtures = {};
-  this._init();
-};
 
+  this.fixtures = {};
+
+
+  var  fixtures_tmp = {}
+      , fixtures_path = _find_fixtures_path();  
+  
+  if ( !fixtures_path ) throw new Error('fixtures path not found');
+
+  var files = fs.readdirSync(fixtures_path); 
+
+  files.forEach(function(file){
+
+      var file_name = file.replace('.js', '');
+      fixtures_tmp[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), encoding='utf8') ); 
+
+  });
+
+  this.fixtures = fixtures_tmp; 
+
+  this.reload();
+
+};
 
 
 /**
@@ -28,9 +49,8 @@ function Fixtures () {
 
 Fixtures.prototype.reload = function () {
 
-  var fxs = this._clone(this.fixtures);
+  var fxs = _clone(this.fixtures);
 
-  // TODO: check whether i is a function on this (ex: reload )
   for ( i in fxs ) {
     if ( fxs.hasOwnProperty(i) ) {
 
@@ -41,36 +61,16 @@ Fixtures.prototype.reload = function () {
 
 };
 
-Fixtures.prototype._init = function () {
-  
-  var  fixtures_tmp = {}
-      , fixtures_path = this._find_fixtures_path();  
-  
-  if ( !fixtures_path ) throw new Error('fixtures path not found');
 
-  var files = fs.readdirSync(fixtures_path); 
+/**
+ * Deep clone of JSON Object
+ *
+ * @param {Object} param
+ * @return {Object}
+ * @api private
+ */
 
-  files.forEach(function(file){
-
-      var file_name = file.replace('.js', '');
-
-      fixtures_tmp[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), encoding='utf8') ); 
-
-  });
-
-  this._load(fixtures_tmp);
-};
-
-Fixtures.prototype._load = function (items) {
-
-  this.fixtures = items; 
-
-  this.reload();
-
-};
-
-// only clone the properties of JSON data, nothing about function or date
-Fixtures.prototype._clone = function (param) {
+function _clone (param) {
 
     var result;
 
@@ -84,13 +84,20 @@ Fixtures.prototype._clone = function (param) {
       return param;
 
     for (var i in param)
-      result[i] = this._clone(param[i]);
+      result[i] = _clone(param[i]);
 
 
     return result;
 };
 
-Fixtures.prototype._find_fixtures_path = function () {
+
+/**
+ * Find the path where the fixtures are located
+ *
+ * @return {String}
+ * @api private
+ */
+function _find_fixtures_path () {
   var current_dir = path.join( module.parent.filename, '..')
     , base_dir = path.basename(current_dir)
     , fixtures_path;
@@ -113,5 +120,9 @@ Fixtures.prototype._find_fixtures_path = function () {
 
 };
 
+
 module.exports = exports = new Fixtures();
+
+
+
 

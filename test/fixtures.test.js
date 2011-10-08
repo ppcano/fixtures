@@ -8,7 +8,6 @@ module.exports = {
   
   load_fixtures: function () {
     
-
 			should.exist(fx.orders);
 			should.exist(fx.users);
 
