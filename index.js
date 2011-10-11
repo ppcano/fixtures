@@ -29,7 +29,7 @@ function Fixtures () {
   files.forEach(function(file){
 
       var file_name = file.replace('.js', '');
-      fixtures_tmp[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), encoding='utf8') ); 
+      fixtures_tmp[file_name] = JSON.parse( fs.readFileSync( path.join(fixtures_path, file), 'utf8') ); 
 
   });
 
@@ -49,7 +49,9 @@ function Fixtures () {
 
 Fixtures.prototype.reload = function () {
 
-  var fxs = _clone(this.fixtures);
+  var i
+    , fxs = _clone(this.fixtures);
+    
 
   for ( i in fxs ) {
     if ( fxs.hasOwnProperty(i) ) {
