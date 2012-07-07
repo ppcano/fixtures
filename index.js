@@ -115,7 +115,7 @@ function _find_fixtures_path () {
 
     fixtures_path = path.join( current_dir, 'fixtures');
 
-    if ( path.existsSync( fixtures_path ) ) return  fixtures_path;
+    if ( fs.existsSync( fixtures_path ) ) return  fixtures_path;
        
   }
   
