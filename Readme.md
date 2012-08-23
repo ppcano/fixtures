@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/ppcano/fixtures.png)](http://travis-ci.org/ppcano/fixtures)
 
 # Fixtures
 
